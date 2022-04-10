@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
 import { Post, Prisma } from '@prisma/client';
+import { FindPostsRequestDto, UpdatePostRequestDto } from './dto/post.dto';
 
 @Injectable()
 export class PostService {
@@ -14,13 +15,7 @@ export class PostService {
     });
   }
 
-  async posts(params: {
-    skip?: number;
-    take?: number;
-    cursor?: Prisma.PostWhereUniqueInput;
-    where?: Prisma.PostWhereInput;
-    orderBy?: Prisma.PostOrderByWithRelationInput;
-  }): Promise<Post[]> {
+  async posts(params: FindPostsRequestDto): Promise<Post[]> {
     const { skip, take, cursor, where, orderBy } = params;
     return this.prisma.post.findMany({
       skip,
@@ -37,10 +32,7 @@ export class PostService {
     });
   }
 
-  async updatePost(params: {
-    where: Prisma.PostWhereUniqueInput;
-    data: Prisma.PostUpdateInput;
-  }): Promise<Post> {
+  async updatePost(params: UpdatePostRequestDto): Promise<Post> {
     const { data, where } = params;
     return this.prisma.post.update({
       data,
